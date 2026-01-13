@@ -176,9 +176,9 @@ img {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     z-index: 1;
-    padding-right: 35px;
+    padding-left: 35px;
 }
 
 .worship-schedule {
@@ -589,12 +589,13 @@ img {
     }
 
     .hero-content {
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 20px;
         padding-right: 0;
     }
 
     .worship-schedule {
-        margin-left: 14px;
+        margin-left: 0;
         margin-right: 14px;
         padding: 21px;
         background-color: rgba(0, 0, 0, 0.4);
@@ -615,14 +616,14 @@ img {
     }
 
     .hero-content {
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 15px;
         padding-right: 0;
-        padding-left: 0;
         align-items: center;
     }
 
     .worship-schedule {
-        margin-left: 15px;
+        margin-left: 0;
         margin-right: 15px;
         padding: 20px 15px;
         max-width: calc(100% - 30px);
@@ -771,17 +772,17 @@ img {
     }
 
     .hero-content {
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 12px;
         padding-right: 0;
-        padding-left: 0;
         align-items: center;
     }
 
     .worship-schedule {
         padding: 16px 12px;
-        margin-left: 10px;
-        margin-right: 10px;
-        max-width: calc(100% - 20px);
+        margin-left: 0;
+        margin-right: 12px;
+        max-width: calc(100% - 24px);
         background-color: rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(5px);
         border-radius: 8px;
