@@ -467,6 +467,27 @@ img {
     margin-bottom: 15px;
 }
 
+/* Video Container Styles */
+.video-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    width: 100%;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
 /* Staff Page Styles */
 .staff-list {
     max-width: 1000px;
@@ -731,6 +752,11 @@ img {
 
     .parallax-description {
         font-size: 16px;
+    }
+
+    .video-container {
+        margin: 30px auto;
+        padding-bottom: 56.25%;
     }
 
     .intro-section {
