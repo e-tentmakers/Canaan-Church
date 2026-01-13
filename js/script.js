@@ -65,30 +65,3 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Parallax scrolling effect for worship image section
-window.addEventListener('scroll', () => {
-    const parallaxSection = document.querySelector('.parallax-section');
-    if (parallaxSection) {
-        const scrolled = window.pageYOffset;
-        const parallaxImage = parallaxSection.querySelector('.parallax-image');
-        const parallaxContent = parallaxSection.querySelector('.parallax-content');
-        
-        if (parallaxImage && parallaxContent) {
-            const sectionTop = parallaxSection.offsetTop;
-            const sectionHeight = parallaxSection.offsetHeight;
-            const windowHeight = window.innerHeight;
-            
-            // Check if section is in viewport
-            if (scrolled + windowHeight > sectionTop && scrolled < sectionTop + sectionHeight) {
-                const scrollProgress = (scrolled - sectionTop + windowHeight) / (sectionHeight + windowHeight);
-                const translateY = scrollProgress * 100;
-                
-                // Move image slower (parallax effect)
-                parallaxImage.style.transform = `translateY(${translateY * 0.5}px) scale(1.1)`;
-                
-                // Move text content
-                parallaxContent.style.transform = `translateY(${translateY * 0.3}px)`;
-            }
-        }
-    }
-});
