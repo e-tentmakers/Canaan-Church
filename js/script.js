@@ -15,15 +15,32 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Mobile dropdown menu toggle
-if (window.innerWidth <= 968) {
-    document.querySelectorAll('.nav-item.dropdown').forEach(item => {
-        const link = item.querySelector('.nav-link');
-        if (link) {
-            link.addEventListener('click', (e) => {
+const dropdownItems = document.querySelectorAll('.nav-item.dropdown');
+const isMobileView = () => window.innerWidth <= 968;
+
+// Mobile dropdown menu toggle and link handling
+if (navMenu) {
+    navMenu.addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (!link) {
+            return;
+        }
+
+        const dropdownItem = link.closest('.nav-item.dropdown');
+        const isTopLevel = link.classList.contains('nav-link');
+
+        if (isMobileView() && dropdownItem && isTopLevel) {
+            const href = link.getAttribute('href') || '';
+            if (href === '#' || href === '') {
                 e.preventDefault();
-                item.classList.toggle('active');
-            });
+                dropdownItem.classList.toggle('active');
+                return;
+            }
+        }
+
+        if (isMobileView()) {
+            navMenu.classList.remove('active');
+            dropdownItems.forEach(item => item.classList.remove('active'));
         }
     });
 }
@@ -31,23 +48,10 @@ if (window.innerWidth <= 968) {
 // Handle window resize
 window.addEventListener('resize', () => {
     if (window.innerWidth > 968) {
-        document.querySelectorAll('.nav-item.dropdown').forEach(item => {
-            item.classList.remove('active');
-        });
+        dropdownItems.forEach(item => item.classList.remove('active'));
         if (navMenu) {
             navMenu.classList.remove('active');
         }
-    } else {
-        // Re-attach mobile dropdown handlers
-        document.querySelectorAll('.nav-item.dropdown').forEach(item => {
-            const link = item.querySelector('.nav-link');
-            if (link) {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    item.classList.toggle('active');
-                });
-            }
-        });
     }
 });
 

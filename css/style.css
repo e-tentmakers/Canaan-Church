@@ -293,6 +293,55 @@ img {
     background-color: #6b5a42;
 }
 
+/* Worship Media Section */
+.worship-media-section {
+    padding: 100px 0;
+    background-color: #fff;
+}
+
+.worship-media-card {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 30px;
+    background-color: #f6f4f1;
+    border: 2px dashed #c7c7c7;
+    border-radius: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: center;
+}
+
+.worship-info-content .worship-media-card {
+    margin-top: 30px;
+}
+
+.worship-media-text {
+    font-size: 20px;
+    color: #666;
+    font-weight: 500;
+}
+
+.youtube-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 36px;
+    background-color: #c53030;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.youtube-link-btn:hover {
+    background-color: #a32626;
+    transform: translateY(-2px);
+}
+
 /* Notice Section */
 .notice-section {
     padding: 100px 0;
@@ -706,6 +755,22 @@ img {
         font-size: 16px;
     }
 
+    .worship-media-card {
+        padding: 50px 20px;
+        gap: 20px;
+    }
+
+    .worship-media-text {
+        font-size: 17px;
+    }
+
+    .youtube-link-btn {
+        width: 100%;
+        max-width: 280px;
+        font-size: 16px;
+        padding: 12px 24px;
+    }
+
     .page-title {
         font-size: 28px;
     }
@@ -816,6 +881,14 @@ img {
 
     .intro-description {
         font-size: 15px;
+    }
+
+    .worship-media-card {
+        padding: 40px 16px;
+    }
+
+    .worship-media-text {
+        font-size: 16px;
     }
 }
 
