@@ -69,3 +69,76 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Hero slider
+const heroSlides = document.querySelectorAll('.hero-slide');
+const heroDots = document.querySelectorAll('.hero-dot');
+let heroIndex = 0;
+
+const setHeroSlide = (index) => {
+    heroSlides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+    });
+    heroDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    heroIndex = index;
+};
+
+if (heroSlides.length > 1) {
+    heroDots.forEach((dot, i) => {
+        dot.addEventListener('click', () => setHeroSlide(i));
+    });
+
+    setInterval(() => {
+        const nextIndex = (heroIndex + 1) % heroSlides.length;
+        setHeroSlide(nextIndex);
+    }, 5000);
+}
+
+// Gallery lightbox
+const lightbox = document.querySelector('.lightbox');
+const galleryGrid = document.querySelector('.gallery-grid');
+
+if (lightbox && galleryGrid) {
+    const lightboxImage = lightbox.querySelector('img');
+    const lightboxClose = lightbox.querySelector('.lightbox-close');
+
+    const closeLightbox = () => {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    };
+
+    galleryGrid.addEventListener('click', (e) => {
+        const img = e.target.closest('img');
+        if (!img) {
+            return;
+        }
+
+        if (lightboxImage) {
+            lightboxImage.src = img.src;
+            lightboxImage.alt = img.alt || 'gallery image';
+        }
+
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    });
+
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+}
+
