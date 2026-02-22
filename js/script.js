@@ -129,16 +129,35 @@ if (lightbox) {
     });
 }
 
-// Collapsible gallery sections
-document.querySelectorAll('.gallery-section-title[data-collapsible]').forEach((title) => {
-    const section = title.closest('.gallery-section');
-    const content = section?.querySelector('.gallery-section-content');
+// Collapsible gallery sections (event delegation for reliability)
+function toggleGallerySection(title) {
+    var section = title.closest('.gallery-section');
+    var content = section && section.querySelector('.gallery-section-content');
     if (!section || !content) return;
 
-    title.addEventListener('click', () => {
-        const isCollapsed = section.classList.contains('collapsed');
-        section.classList.toggle('collapsed', !isCollapsed);
-        title.classList.toggle('collapsed', !isCollapsed);
-        content.classList.toggle('collapsed', !isCollapsed);
+    var isCollapsed = section.classList.contains('collapsed');
+    section.classList.toggle('collapsed', !isCollapsed);
+    title.classList.toggle('collapsed', !isCollapsed);
+    content.classList.toggle('collapsed', !isCollapsed);
+}
+
+function initCollapsibleGallery() {
+    document.addEventListener('click', function(e) {
+        var title = e.target.closest('.gallery-section-title[data-collapsible]');
+        if (!title) return;
+        e.preventDefault();
+        toggleGallerySection(title);
     });
-});
+    document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var title = e.target.closest('.gallery-section-title[data-collapsible]');
+        if (!title) return;
+        e.preventDefault();
+        toggleGallerySection(title);
+    });
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCollapsibleGallery);
+} else {
+    initCollapsibleGallery();
+}

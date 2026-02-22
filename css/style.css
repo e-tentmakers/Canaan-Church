@@ -663,7 +663,7 @@ img {
     margin-bottom: 0;
 }
 
-.gallery-section-title {
+.gallery-section .gallery-section-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -675,7 +675,13 @@ img {
     cursor: pointer;
     user-select: none;
     transition: background-color 0.3s;
-    margin-bottom: 0;
+    margin: 0;
+    border: none;
+}
+
+.gallery-section-title:focus {
+    outline: 2px solid #8b7355;
+    outline-offset: 2px;
 }
 
 .gallery-section-title:hover {
@@ -690,6 +696,8 @@ img {
     font-size: 14px;
     color: #8b7355;
     transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .gallery-section-content {
