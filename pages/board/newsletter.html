@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>약속의 땅 소식지 - 가나안교회</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #525659;
+            color: #fff;
+        }
+
+        .viewer-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 16px;
+            background-color: #2c3e50;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .viewer-title {
+            font-size: 16px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .viewer-download {
+            flex-shrink: 0;
+            padding: 6px 14px;
+            border-radius: 6px;
+            background-color: #8b7355;
+            color: #fff;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .viewer-pages {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .viewer-pages canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        .viewer-status {
+            text-align: center;
+            padding: 40px 16px;
+            font-size: 16px;
+        }
+
+        .viewer-status a {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .viewer-toolbar {
+                padding: 8px 12px;
+            }
+
+            .viewer-title {
+                font-size: 14px;
+            }
+
+            .viewer-download {
+                font-size: 13px;
+                padding: 5px 10px;
+            }
+
+            .viewer-pages {
+                padding: 8px;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="viewer-toolbar">
+        <span class="viewer-title">약속의 땅 소식지</span>
+        <a class="viewer-download" id="downloadLink" href="#" download>PDF 다운로드</a>
+    </header>
+    <main class="viewer-pages" id="pages">
+        <p class="viewer-status" id="status">소식지를 불러오는 중입니다...</p>
+    </main>
+
+    <script type="module">
+        import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs';
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+
+        const params = new URLSearchParams(window.location.search);
+        const fileName = (params.get('file') || '').replace(/[\\/]/g, '');
+        const titleText = params.get('title');
+        const pdfUrl = '../../newsletters/' + encodeURIComponent(fileName);
+
+        const pagesEl = document.getElementById('pages');
+        const statusEl = document.getElementById('status');
+        const downloadLink = document.getElementById('downloadLink');
+
+        if (titleText) {
+            document.querySelector('.viewer-title').textContent = titleText;
+            document.title = titleText + ' - 가나안교회';
+        }
+        downloadLink.href = pdfUrl;
+
+        let pdfDoc = null;
+        let renderedWidth = 0;
+        let renderToken = 0;
+
+        async function renderAll() {
+            const token = ++renderToken;
+            const width = pagesEl.clientWidth - parseFloat(getComputedStyle(pagesEl).paddingLeft) * 2;
+            const ratio = window.devicePixelRatio || 1;
+            renderedWidth = window.innerWidth;
+            pagesEl.replaceChildren();
+
+            for (let num = 1; num <= pdfDoc.numPages; num++) {
+                const page = await pdfDoc.getPage(num);
+                if (token !== renderToken) return;
+
+                const baseViewport = page.getViewport({ scale: 1 });
+                const viewport = page.getViewport({ scale: (width / baseViewport.width) * ratio });
+
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.floor(viewport.width);
+                canvas.height = Math.floor(viewport.height);
+                pagesEl.appendChild(canvas);
+
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+            }
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            if (!pdfDoc || window.innerWidth === renderedWidth) return;
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(renderAll, 250);
+        });
+
+        try {
+            if (!fileName) throw new Error('missing file');
+            pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+            await renderAll();
+        } catch (err) {
+            statusEl.innerHTML = '소식지를 표시할 수 없습니다. <a href="' + pdfUrl + '">PDF 파일 직접 열기</a>';
+            pagesEl.replaceChildren(statusEl);
+        }
+    </script>
+</body>
+</html>
